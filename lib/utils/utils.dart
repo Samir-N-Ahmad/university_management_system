@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:university_management_system/model/data.dart';
 import 'package:university_management_system/view/widgets/error_placeholder.dart';
+import 'package:university_management_system/common/settings.dart'
+    as app_settings;
 
 typedef OnLoading = Widget Function(BuildContext, Data);
 typedef OnError = Widget Function(BuildContext, Data);
