@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:u/view/screen/main_screen.dart';
+import 'package:university_management_system/view/screen/main_screen.dart';
 
 void main() {
   runApp(MyApp());
