@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:university_management_system/view/widgets/main_section_widget.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -44,7 +45,7 @@ class _MainScreenState extends State<MainScreen> {
                 flex: 9,
                 child: GridView.builder(
                     padding: EdgeInsets.all(10),
-                    itemCount: 6,
+                    itemCount: _mainSections.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: MediaQuery.of(context).orientation ==
                                 Orientation.landscape
@@ -53,18 +54,27 @@ class _MainScreenState extends State<MainScreen> {
                         crossAxisSpacing: 20,
                         childAspectRatio: 1,
                         mainAxisSpacing: 20),
-                    itemBuilder: (context, index) => Container(
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Color(0x77B2B2B2),
-                                    blurRadius: 10,
-                                    spreadRadius: 3)
-                              ]),
-                        )))
+                    itemBuilder: (context, index) => _mainSections[index]))
           ],
         ));
   }
+
+  List<Widget> _mainSections = [
+    MainSectionWidget(
+        iconAsset: "assets/icons/lectures.svg",
+        title: "Lectures",
+        onPressed: () {}),
+    MainSectionWidget(
+        iconAsset: "assets/icons/exam_results.svg",
+        title: "Exams Results",
+        onPressed: () {}),
+    MainSectionWidget(
+        iconAsset: "assets/icons/correction_ladders.svg",
+        title: "correction Ladders",
+        onPressed: () {}),
+    MainSectionWidget(
+        iconAsset: "assets/icons/management.svg",
+        title: "management",
+        onPressed: () {}),
+  ];
 }
