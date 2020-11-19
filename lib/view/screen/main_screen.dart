@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -21,15 +22,15 @@ class _MainScreenState extends State<MainScreen> {
           actions: [
             IconButton(
               onPressed: null,
-              icon: Icon(Icons.notifications_on),
+              icon: SvgPicture.asset("assets/icons/notifications.svg"),
             ),
             IconButton(
               onPressed: null,
-              icon: Icon(Icons.search),
+              icon: SvgPicture.asset("assets/icons/download.svg"),
             ),
             IconButton(
               onPressed: null,
-              icon: Icon(Icons.download_done_sharp),
+              icon: SvgPicture.asset("assets/icons/search.svg"),
             )
           ],
         ),
