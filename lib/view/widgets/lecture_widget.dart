@@ -9,9 +9,14 @@ typedef OnDownload = void Function();
 class LectureWidget extends StatelessWidget {
   final String _lecture;
   final OnDownload _onDownload;
+  final bool _downloading;
 
-  LectureWidget({@required OnDownload onDownload, @required String title})
+  LectureWidget(
+      {@required OnDownload onDownload,
+      @required String title,
+      bool downloading = false})
       : _lecture = title,
+        _downloading = downloading,
         _onDownload = onDownload;
   @override
   Widget build(BuildContext context) => GestureDetector(
@@ -37,45 +42,47 @@ class LectureWidget extends StatelessWidget {
               _lecture,
               style: app_settings.TextStyles.TEXT_SMALL_BOLD_DARK,
             )),
-            Row(
-              children: [
-                Expanded(
-                    child: Column(
-                  children: [
-                    Text(
-                      "80% Downloading",
-                      style:
-                          app_settings.TextStyles.TEXT_EXTRA_SMALL_REGULAR_DARK,
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Stack(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(3),
-                          decoration: BoxDecoration(
-                            color: Color(0XFFEEEEEE),
-                            borderRadius: BorderRadius.vertical(
-                                bottom: Radius.circular(5)),
+            _downloading
+                ? Row(
+                    children: [
+                      Expanded(
+                          child: Column(
+                        children: [
+                          Text(
+                            "80% Downloading",
+                            style: app_settings
+                                .TextStyles.TEXT_EXTRA_SMALL_REGULAR_DARK,
                           ),
-                        ),
-                        ClipRRect(
-                            borderRadius: BorderRadius.vertical(
-                                bottom: Radius.circular(5)),
-                            child: LinearProgressIndicator(
-                              minHeight: 6,
-                              value: 0.6,
-                              backgroundColor: Color(0XFFEEEEEE),
-                              valueColor:
-                                  AlwaysStoppedAnimation(Color(0XFF3FD1FF)),
-                            ))
-                      ],
-                    )
-                  ],
-                ))
-              ],
-            )
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Stack(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(3),
+                                decoration: BoxDecoration(
+                                  color: Color(0XFFEEEEEE),
+                                  borderRadius: BorderRadius.vertical(
+                                      bottom: Radius.circular(5)),
+                                ),
+                              ),
+                              ClipRRect(
+                                  borderRadius: BorderRadius.vertical(
+                                      bottom: Radius.circular(5)),
+                                  child: LinearProgressIndicator(
+                                    minHeight: 6,
+                                    value: 0.6,
+                                    backgroundColor: Color(0XFFEEEEEE),
+                                    valueColor: AlwaysStoppedAnimation(
+                                        Color(0XFF3FD1FF)),
+                                  ))
+                            ],
+                          )
+                        ],
+                      ))
+                    ],
+                  )
+                : Container()
           ],
         ),
         decoration: BoxDecoration(
