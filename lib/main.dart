@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:university_management_system/service/download_manager.dart';
 
-void main() {
+void main() async {
+  await DownloadManger.instance().init();
   runApp(MyApp());
 }
 
