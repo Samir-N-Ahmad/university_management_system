@@ -19,6 +19,7 @@ class ChipWidget extends StatelessWidget {
         _onPress = onPress;
   @override
   Widget build(BuildContext context) => Container(
+        margin: EdgeInsets.symmetric(horizontal: 5),
         decoration: BoxDecoration(
             color: app_settings.DefaultAppColorTHeme.COLOR_BG_SECONDARY,
             borderRadius:

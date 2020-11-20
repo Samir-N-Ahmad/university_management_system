@@ -23,9 +23,10 @@ class _LecturesScreenState extends State<LecturesScreen> {
             leading: IconButton(
                 icon: Icon(Icons.arrow_back, color: Colors.black),
                 onPressed: null),
+            centerTitle: true,
             title: Text(
               "Electronic Lectures",
-              style: app_settings.TextStyles.TEXT_MEDIUM_BOLD_DARK,
+              style: app_settings.TextStyles.TEXT_LARGE_BOLD_DARK,
             ),
             actions: [
               IconButton(
@@ -61,9 +62,15 @@ class _LecturesScreenState extends State<LecturesScreen> {
                           Orientation.landscape
                       ? 4
                       : 2,
-                  crossAxisSpacing: 20,
+                  crossAxisSpacing: MediaQuery.of(context).orientation ==
+                          Orientation.landscape
+                      ? 10
+                      : 20,
                   childAspectRatio: 1,
-                  mainAxisSpacing: 20),
+                  mainAxisSpacing: MediaQuery.of(context).orientation ==
+                          Orientation.landscape
+                      ? 10
+                      : 20),
               itemBuilder: (context, index) => _mainSections[index]),
           color: Color(0xFFEEEEEE),
         ),
@@ -74,6 +81,10 @@ class _LecturesScreenState extends State<LecturesScreen> {
   List<Widget> _mainSections = [
     LectureWidget(title: "Lecture1", onDownload: () {}),
     LectureWidget(title: "Lecture2", onDownload: () {}),
+    LectureWidget(title: "Lecture3", onDownload: () {}),
+    LectureWidget(title: "Lecture3", onDownload: () {}),
+    LectureWidget(title: "Lecture3", onDownload: () {}),
+    LectureWidget(title: "Lecture3", onDownload: () {}),
     LectureWidget(title: "Lecture3", onDownload: () {}),
   ];
 }
