@@ -30,7 +30,10 @@ class MainSectionWidget extends StatelessWidget {
                   flex: 3,
                   child: SvgPicture.asset(
                     _icon,
-                    fit: BoxFit.contain,
+                    width: MediaQuery.of(context).orientation ==
+                            Orientation.landscape
+                        ? MediaQuery.of(context).size.width * 0.1
+                        : MediaQuery.of(context).size.width * 0.2,
                   )),
               Expanded(
                   child: Text(
@@ -40,9 +43,13 @@ class MainSectionWidget extends StatelessWidget {
             ],
           ),
           padding: EdgeInsets.all(5),
-          decoration: BoxDecoration(color: Colors.white, boxShadow: [
-            BoxShadow(color: Color(0x77B2B2B2), blurRadius: 10, spreadRadius: 3)
-          ]),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                    color: Color(0x77B2B2B2), blurRadius: 10, spreadRadius: 3)
+              ]),
         ));
   }
 }
