@@ -43,14 +43,7 @@ class Utils {
     return returnedValue;
   }
 
-  static bool isNullOrEmpty(dynamic o) => o == null || (o is String)
-      ? o == ""
-      : false || (o is Map)
-          ? (o as Map).length == 0
-          : false || (o is List)
-              ? (o as List).length == 0
-              : false;
-
+  static bool isNullOrEmpty(dynamic o) => o == null || o == "";
   static Future<dynamic> showIrremovableErrorMessage(
     BuildContext context, {
     List<Widget> actions,
