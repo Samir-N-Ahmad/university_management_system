@@ -22,34 +22,37 @@ class _LecturesScreenState extends State<LecturesScreen> {
             backgroundColor: Colors.white,
             leading: IconButton(
                 icon: Icon(Icons.arrow_back, color: Colors.black),
-                onPressed: null),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                }),
             centerTitle: true,
             title: Text(
               "Electronic Lectures",
               style: app_settings.TextStyles.TEXT_LARGE_BOLD_DARK,
             ),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.shopping_cart),
-                tooltip: 'Open shopping cart',
-                onPressed: () {
-                  // handle the press
-                },
-              ),
-            ],
           ),
           SliverToBoxAdapter(
             child: Container(
               padding: EdgeInsets.all(5),
               height: 45,
               color: Colors.white,
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 4,
-                  itemBuilder: (context, index) => ChipWidget(
+              child: ListView(
+                children: [
+                  ChipWidget(
                       onPress: () {},
-                      label: "Study Year",
-                      icon: Icons.add_circle)),
+                      label: "Scholar Year",
+                      icon: Icons.add_circle),
+                  ChipWidget(
+                      onPress: () {}, label: "Year", icon: Icons.add_circle),
+                  ChipWidget(
+                      onPress: () {},
+                      label: "Semester",
+                      icon: Icons.add_circle),
+                  ChipWidget(
+                      onPress: () {}, label: "Subject", icon: Icons.add_circle)
+                ],
+                scrollDirection: Axis.horizontal,
+              ),
             ),
           )
         ],
@@ -79,7 +82,11 @@ class _LecturesScreenState extends State<LecturesScreen> {
   }
 
   List<Widget> _mainSections = [
-    LectureWidget(title: "Lecture1", onDownload: () {}),
+    LectureWidget(
+      title: "Lecture1",
+      onDownload: () {},
+      downloading: true,
+    ),
     LectureWidget(title: "Lecture2", onDownload: () {}),
     LectureWidget(title: "Lecture3", onDownload: () {}),
     LectureWidget(title: "Lecture3", onDownload: () {}),
