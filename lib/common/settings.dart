@@ -77,10 +77,18 @@ class TextStyles {
       color: DefaultAppColorTHeme.COLOR_FONT_LIGHT,
       fontSize: FontSizes.SMALL,
       fontWeight: FontWeights.REGULAR);
+  static const TEXT_SMALL_REGULAR_GREY = TextStyle(
+      color: DefaultAppColorTHeme.COLOR_FONT_GREY,
+      fontSize: FontSizes.SMALL,
+      fontWeight: FontWeights.REGULAR);
   static const TEXT_SMALL_BOLD_DARK = TextStyle(
       color: DefaultAppColorTHeme.COLOR_FONT_DARK,
       fontSize: FontSizes.SMALL,
       fontWeight: FontWeights.BOLD);
+  static const TEXT_SMALL_MEDIUM_DARK = TextStyle(
+      color: DefaultAppColorTHeme.COLOR_FONT_DARK,
+      fontSize: FontSizes.SMALL,
+      fontWeight: FontWeights.MEDIUM);
   static const TEXT_EXTRA_SMALL_REGULAR_LIGHT = TextStyle(
       color: DefaultAppColorTHeme.COLOR_FONT_LIGHT,
       fontSize: FontSizes.EXTRA_SMALL,
