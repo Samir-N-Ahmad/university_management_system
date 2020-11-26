@@ -5,9 +5,11 @@
          In most cases you can leave this as-is, but you if you want to provide
          additional functionality it is fine to subclass or reimplement
          FlutterApplication and put your custom class here. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="u"
+        android:label="university_management_system"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -43,31 +45,16 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <provider
+                android:name="vn.hunghd.flutterdownloader.DownloadedFileProvider"
+                android:authorities="${applicationId}.flutter_downloader.provider"
+                android:exported="false"
+                android:grantUriPermissions="true">
+                <meta-data
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/provider_paths"/>
+        </provider>      
     </application>
     
-<!--flutter_downloader: basic configurations  -->
-<provider
-    android:name="vn.hunghd.flutterdownloader.DownloadedFileProvider"
-    android:authorities="${applicationId}.flutter_downloader.provider"
-    android:exported="false"
-    android:grantUriPermissions="true">
-    <meta-data
-        android:name="android.support.FILE_PROVIDER_PATHS"
-        android:resource="@xml/provider_paths"/>
-<!-- flutter_downloader: Configure maximum number of concurrent tasks -->
-<provider
-     android:name="androidx.work.impl.WorkManagerInitializer"
-     android:authorities="${applicationId}.workmanager-init"
-     tools:node="remove" />
 
- <provider
-     android:name="vn.hunghd.flutterdownloader.FlutterDownloaderInitializer"
-     android:authorities="${applicationId}.flutter-downloader-init"
-     android:exported="false">
-     <!-- changes this number to configure the maximum number of concurrent tasks -->
-     <meta-data
-         android:name="vn.hunghd.flutterdownloader.MAX_CONCURRENT_TASKS"
-         android:value="5" />
- </provider>
-</provider>
 </manifest>
