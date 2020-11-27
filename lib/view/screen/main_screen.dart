@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:university_management_system/view/screen/announcements_screen.dart';
+import 'package:university_management_system/view/screen/downloads_screen.dart';
 import 'package:university_management_system/view/screen/lectures_screen.dart';
 import 'package:university_management_system/view/widgets/main_section_widget.dart';
 
@@ -28,7 +29,10 @@ class _MainScreenState extends State<MainScreen> {
               icon: SvgPicture.asset("assets/icons/notifications.svg"),
             ),
             IconButton(
-              onPressed: null,
+              onPressed: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => DownloadsSCreen()));
+              },
               icon: SvgPicture.asset("assets/icons/download.svg"),
             ),
             IconButton(
