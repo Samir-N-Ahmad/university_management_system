@@ -41,8 +41,11 @@ class DownloadManger {
 
   /// Load previous tasks.
   Future<void> loadFiles() async {
-    (await FlutterDownloader.loadTasks()).map((e) => _downloadTasks[e.taskId] =
-        TaskInfo(id: e.taskId, progress: e.progress, status: e.status));
+    (await FlutterDownloader.loadTasks()).map((e) {
+      _downloadTasks[e.taskId] =
+          TaskInfo(id: e.taskId, progress: e.progress, status: e.status);
+      _downloadTasks[e.taskId]?.task = e;
+    });
     _tasksStreamController.sink.add(_downloadTasks.values.toList());
   }
 
@@ -108,6 +111,7 @@ class DownloadManger {
         DownloadTask task = await getTask(id);
         if (task != null) {
           _downloadTasksFullInfo[id] = task;
+          _downloadTasks[id]?.task = task;
         }
       }
     }
@@ -140,6 +144,7 @@ class TaskInfo with ChangeNotifier {
   int progress;
   DownloadTaskStatus status;
   String id;
+  DownloadTask task;
 
   void update(DownloadTaskStatus status, String id) {
     status = status;
