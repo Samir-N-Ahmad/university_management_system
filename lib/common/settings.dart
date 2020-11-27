@@ -24,6 +24,15 @@ class Settings {
     EndPoint.updateProduct: "/update/product",
     EndPoint.getProductInstance: "/productInstance/"
   };
+  static const List<String> DOWNLOAD_TASK_STATUS = [
+    "Unknown",
+    "Waiting",
+    "Downloading",
+    "Complete",
+    "Failed",
+    "Canceled",
+    "Paused"
+  ];
 }
 
 class DefaultAppColorTHeme {
