@@ -14,14 +14,13 @@ class DownloadManger {
 
   // Download task.
   Map<String, TaskInfo> _downloadTasks = {};
-  Map<String, DownloadTask> _downloadTasksFullInfo = {};
 
   StreamController<List<TaskInfo>> _tasksStreamController =
-      StreamController<List<TaskInfo>>.broadcast();
+      StreamController<List<TaskInfo>>();
 
   Stream<List<TaskInfo>> get tasksStream => _tasksStreamController.stream;
   ReceivePort _port = ReceivePort();
-  String _sendPort = "SEND_PORT";
+  static String _sendPort = "SEND_PORT";
 
   /// Initialize service.
   Future<void> init() async {
@@ -29,7 +28,12 @@ class DownloadManger {
     IsolateNameServer.registerPortWithName(_port.sendPort, _sendPort);
     _port.listen((dynamic data) {
       TaskInfo downloadTaskProgress = TaskInfo.fromList(data);
-      _downloadTasks[downloadTaskProgress.id] = downloadTaskProgress;
+      if (_downloadTasks.containsKey(downloadTaskProgress.id)) {
+        _downloadTasks[downloadTaskProgress.id]
+            .update(downloadTaskProgress.status, downloadTaskProgress.progress);
+      } else {
+        _downloadTasks[downloadTaskProgress.id] = downloadTaskProgress;
+      }
       _tasksStreamController.sink.add(_downloadTasks.values.toList());
     });
     await FlutterDownloader.initialize(
@@ -41,12 +45,17 @@ class DownloadManger {
 
   /// Load previous tasks.
   Future<void> loadFiles() async {
-    (await FlutterDownloader.loadTasks()).map((e) {
-      _downloadTasks[e.taskId] =
-          TaskInfo(id: e.taskId, progress: e.progress, status: e.status);
-      _downloadTasks[e.taskId]?.task = e;
-    });
-    _tasksStreamController.sink.add(_downloadTasks.values.toList());
+    List<DownloadTask> tasks = await FlutterDownloader.loadTasks();
+    for (var task in tasks) {
+      _downloadTasks[task.taskId] = TaskInfo(
+        id: task.taskId,
+        progress: task.progress,
+        status: task.status,
+      );
+      _downloadTasks[task.taskId]?.task = task;
+    }
+    List<TaskInfo> tasksInfo = _downloadTasks.values.toList();
+    _tasksStreamController.sink.add(tasksInfo);
   }
 
   /// Download a file using the given [url] with the given [key].
@@ -65,7 +74,7 @@ class DownloadManger {
   /// Helps to
   static void _downloadCallback(
       String id, DownloadTaskStatus status, int progress) {
-    final SendPort send = IsolateNameServer.lookupPortByName('SEND_PORT');
+    final SendPort send = IsolateNameServer.lookupPortByName(_sendPort);
     send.send([id, status, progress]);
   }
 
@@ -102,16 +111,24 @@ class DownloadManger {
   Future<void> _newTask(String url) async {
     String directory = await FilePicker.platform.getDirectoryPath();
     if (directory != null && directory != "") {
+      String fileName = await _extractFileName(url);
       String id = await FlutterDownloader.enqueue(
           headers: {"auth": "test_for_sql_encoding"},
           url: url,
+          fileName: fileName,
           savedDir: directory,
           openFileFromNotification: true);
       if (id != "" && id != null) {
         DownloadTask task = await getTask(id);
         if (task != null) {
-          _downloadTasksFullInfo[id] = task;
+          if (_downloadTasks.containsKey(task.taskId)) {
+            _downloadTasks[id].update(task.status, task.progress);
+          } else {
+            _downloadTasks[id] = TaskInfo(
+                id: task.taskId, status: task.status, progress: task.progress);
+          }
           _downloadTasks[id]?.task = task;
+          _tasksStreamController.sink.add(_downloadTasks.values.toList());
         }
       }
     }
@@ -120,16 +137,18 @@ class DownloadManger {
   /// Get the task with [id]
   Future<DownloadTask> getTask(String id) async {
     assert(id != null);
-    if (_downloadTasksFullInfo.containsKey(id)) {
-      return _downloadTasksFullInfo[id];
-    }
     var tasks = await FlutterDownloader.loadTasksWithRawQuery(
-        query: "SELECT * FROM task WHERE id=$id");
-    if (tasks != null && tasks.isEmpty) {
-      _downloadTasksFullInfo[id] = tasks[0];
+        query: "SELECT * FROM task WHERE task_id='$id'");
+    if (tasks != null && tasks.isNotEmpty) {
       return tasks[0];
     }
     return null;
+  }
+
+  static Future<String> _extractFileName(String url) async {
+    int start = url.lastIndexOf('/') + 1;
+    int end = url.length;
+    return url.substring(start, end);
   }
 
   /// Closes streams.
@@ -146,9 +165,9 @@ class TaskInfo with ChangeNotifier {
   String id;
   DownloadTask task;
 
-  void update(DownloadTaskStatus status, String id) {
-    status = status;
-    id = id;
+  void update(DownloadTaskStatus status, int progress) {
+    this.status = status;
+    this.progress = progress;
     notifyListeners();
   }
 
