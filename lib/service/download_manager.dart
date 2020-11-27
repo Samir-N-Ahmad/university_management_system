@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:rxdart/rxdart.dart';
 
 class DownloadManger {
   static DownloadManger _instance = DownloadManger._internal();
@@ -16,7 +17,7 @@ class DownloadManger {
   Map<String, TaskInfo> _downloadTasks = {};
 
   StreamController<List<TaskInfo>> _tasksStreamController =
-      StreamController<List<TaskInfo>>();
+      BehaviorSubject<List<TaskInfo>>();
 
   Stream<List<TaskInfo>> get tasksStream => _tasksStreamController.stream;
   ReceivePort _port = ReceivePort();
