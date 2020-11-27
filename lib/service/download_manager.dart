@@ -21,10 +21,12 @@ class DownloadManger {
   Stream<List<TaskInfo>> get tasksStream => _tasksStreamController.stream;
   ReceivePort _port = ReceivePort();
   static String _sendPort = "SEND_PORT";
+  static String _downloadDiectory;
 
   /// Initialize service.
   Future<void> init() async {
     await Permission.storage.request();
+    _downloadDiectory = await FilePicker.platform.getDirectoryPath();
     IsolateNameServer.registerPortWithName(_port.sendPort, _sendPort);
     _port.listen((dynamic data) {
       TaskInfo downloadTaskProgress = TaskInfo.fromList(data);
@@ -109,14 +111,13 @@ class DownloadManger {
 
   /// Create a new task.
   Future<void> _newTask(String url) async {
-    String directory = await FilePicker.platform.getDirectoryPath();
-    if (directory != null && directory != "") {
+    if (_downloadDiectory != null && _downloadDiectory != "") {
       String fileName = await _extractFileName(url);
       String id = await FlutterDownloader.enqueue(
           headers: {"auth": "test_for_sql_encoding"},
           url: url,
           fileName: fileName,
-          savedDir: directory,
+          savedDir: _downloadDiectory,
           openFileFromNotification: true);
       if (id != "" && id != null) {
         DownloadTask task = await getTask(id);
