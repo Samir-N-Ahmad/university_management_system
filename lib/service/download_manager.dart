@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:isolate';
 import 'dart:ui';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -27,23 +27,29 @@ class DownloadManger {
   /// Initialize service.
   Future<void> init() async {
     await Permission.storage.request();
-    _downloadDiectory = await FilePicker.platform.getDirectoryPath();
-    IsolateNameServer.registerPortWithName(_port.sendPort, _sendPort);
-    _port.listen((dynamic data) {
-      TaskInfo downloadTaskProgress = TaskInfo.fromList(data);
-      if (_downloadTasks.containsKey(downloadTaskProgress.id)) {
-        _downloadTasks[downloadTaskProgress.id]
-            .update(downloadTaskProgress.status, downloadTaskProgress.progress);
-      } else {
-        _downloadTasks[downloadTaskProgress.id] = downloadTaskProgress;
-      }
-      _tasksStreamController.sink.add(_downloadTasks.values.toList());
-    });
-    await FlutterDownloader.initialize(
-      debug: true,
-    );
-    FlutterDownloader.registerCallback(_downloadCallback);
-    await loadFiles();
+    if (await Permission.storage.isGranted) {
+      // _downloadDiectory = await FilePicker.platform.getDirectoryPath();
+      var storagDir = await getExternalStorageDirectory();
+      _downloadDiectory = storagDir.path;
+      IsolateNameServer.registerPortWithName(_port.sendPort, _sendPort);
+      _port.listen((dynamic data) {
+        TaskInfo downloadTaskProgress = TaskInfo.fromList(data);
+        if (_downloadTasks.containsKey(downloadTaskProgress.id)) {
+          _downloadTasks[downloadTaskProgress.id].update(
+              downloadTaskProgress.status, downloadTaskProgress.progress);
+        } else {
+          _downloadTasks[downloadTaskProgress.id] = downloadTaskProgress;
+        }
+        _tasksStreamController.sink.add(_downloadTasks.values.toList());
+      });
+      await FlutterDownloader.initialize(
+        debug: true,
+      );
+      FlutterDownloader.registerCallback(_downloadCallback);
+      await loadFiles();
+    } else {
+      print("Storage permissions are not granted!");
+    }
   }
 
   /// Load previous tasks.
