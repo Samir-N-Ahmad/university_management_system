@@ -111,7 +111,7 @@ class DownloadManger {
       // Retry tasks by default.
       default:
         {
-          FlutterDownloader.retry(taskId: task.id);
+          retrytask(task.id);
         }
     }
   }
@@ -164,6 +164,25 @@ class DownloadManger {
     _tasksStreamController.close();
     IsolateNameServer.removePortNameMapping(_sendPort);
   }
+
+  /// This method retry a faild task.
+  ///
+  /// It deletes the faild task and creates a new one for the same file.
+  ///
+  /// **Paremeters**:
+  /// * [id] : The `id` of the faild task.
+  ///
+  void retrytask(String id) async {
+    String newTaskId = await FlutterDownloader.retry(taskId: id);
+    DownloadTask newTask = await getTask(newTaskId);
+    _downloadTasks.remove(id);
+    _downloadTasks[newTaskId] = TaskInfo(
+        id: newTaskId,
+        progress: newTask.progress,
+        status: newTask.status,
+        task: newTask);
+    _tasksStreamController.sink.add(_downloadTasks.values.toList());
+  }
 }
 
 /// Basic info needed for the UI to be shred over isolates.
@@ -184,5 +203,5 @@ class TaskInfo with ChangeNotifier {
         status = data[1],
         progress = data[2];
 
-  TaskInfo({this.id, this.progress, this.status});
+  TaskInfo({this.id, this.progress, this.status, this.task});
 }
