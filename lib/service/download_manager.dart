@@ -171,7 +171,6 @@ class DownloadManger {
   ///
   /// **Paremeters**:
   /// * [id] : The `id` of the faild task.
-  ///
   void retrytask(String id) async {
     String newTaskId = await FlutterDownloader.retry(taskId: id);
     DownloadTask newTask = await getTask(newTaskId);
