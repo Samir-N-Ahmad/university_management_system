@@ -21,103 +21,98 @@ class DownloadItem extends StatelessWidget {
         onTap: _onClick,
         child: Container(
           margin: EdgeInsets.only(bottom: 10),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                    padding: EdgeInsets.all(5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                            flex: 2,
-                            child: Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: app_settings.DefaultAppColorTHeme
-                                        .COLOR_BG_SECONDARY),
-                                child: SvgPicture.asset(
-                                  "assets/icons/file.svg",
-                                ))),
-                        Expanded(
-                            flex: 6,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _taskInfo.task.filename,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 2,
-                                  style: app_settings
-                                      .TextStyles.TEXT_SMALL_MEDIUM_DARK,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        app_settings
-                                                .Settings.DOWNLOAD_TASK_STATUS[
-                                            _taskInfo.status.value],
-                                        overflow: TextOverflow.ellipsis,
-                                        style: app_settings
-                                            .TextStyles.TEXT_SMALL_REGULAR_GREY,
-                                      ),
-                                    ),
-                                    Expanded(
-                                        child: Text("${_taskInfo.progress}%")),
-                                  ],
-                                )
-                              ],
-                            )),
-                        Expanded(
-                            flex: 2,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                // color:
-                                //     app_settings.DefaultAppColorTHeme.COLOR_BG_SECONDARY
-                              ),
-                              child: Center(
-                                  child: GestureDetector(
-                                      onTap: () {
-                                        DownloadManger.instance()
-                                            .download(key: _taskInfo.id);
-                                      },
-                                      child:
-                                          _downloadItemStatusBuilder(context))),
-                            ))
-                      ],
-                    )),
-                Stack(
+          child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+            Container(
+                padding: EdgeInsets.all(5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
-                      padding: EdgeInsets.all(3),
-                      decoration: BoxDecoration(
-                        color: Color(0XFFEEEEEE),
-                        borderRadius:
-                            BorderRadius.vertical(bottom: Radius.circular(5)),
-                      ),
-                    ),
-                    ClipRRect(
-                        borderRadius:
-                            BorderRadius.vertical(bottom: Radius.circular(5)),
-                        child: LinearProgressIndicator(
-                          minHeight: 6,
-                          value: _taskInfo.progress.toDouble() / 100,
-                          backgroundColor: Color(0XFFEEEEEE),
-                          valueColor: AlwaysStoppedAnimation(
-                              _taskInfo.status.value == 4 ||
-                                      _taskInfo.status.value == 5
-                                  ? Color(0XFF3FD1FF).withRed(200)
-                                  : _taskInfo.status.value == 6
-                                      ? Color(0X553FD1FF)
-                                      : Color(0XFF3FD1FF)),
+                    Expanded(
+                        flex: 2,
+                        child: Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: app_settings
+                                    .DefaultAppColorTHeme.COLOR_BG_SECONDARY),
+                            child: SvgPicture.asset(
+                              "assets/icons/file.svg",
+                            ))),
+                    Expanded(
+                        flex: 6,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _taskInfo.task.filename,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: app_settings
+                                  .TextStyles.TEXT_SMALL_MEDIUM_DARK,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    app_settings.Settings.DOWNLOAD_TASK_STATUS[
+                                        _taskInfo.status.value],
+                                    overflow: TextOverflow.ellipsis,
+                                    style: app_settings
+                                        .TextStyles.TEXT_SMALL_REGULAR_GREY,
+                                  ),
+                                ),
+                                Expanded(child: Text("${_taskInfo.progress}%")),
+                              ],
+                            )
+                          ],
+                        )),
+                    Expanded(
+                        flex: 2,
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                              child: GestureDetector(
+                                  onTap: () {
+                                    DownloadManger.instance()
+                                        .download(key: _taskInfo.id);
+                                  },
+                                  child: _downloadItemStatusBuilder(context))),
                         ))
                   ],
-                )
-              ]),
+                )),
+            Stack(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    color: Color(0XFFEEEEEE),
+                    borderRadius:
+                        BorderRadius.vertical(bottom: Radius.circular(5)),
+                  ),
+                ),
+                ClipRRect(
+                    borderRadius:
+                        BorderRadius.vertical(bottom: Radius.circular(5)),
+                    child: LinearProgressIndicator(
+                      minHeight: 6,
+                      value: _taskInfo.progress.toDouble() / 100,
+                      backgroundColor: Color(0XFFEEEEEE),
+                      valueColor: AlwaysStoppedAnimation(
+                          _taskInfo.status.value == 4 ||
+                                  _taskInfo.status.value == 5
+                              ? Color(0XFF3FD1FF).withRed(200)
+                              : _taskInfo.status.value == 6
+                                  ? Color(0X553FD1FF)
+                                  : Color(0XFF3FD1FF)),
+                    ))
+              ],
+            )
+          ]),
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
