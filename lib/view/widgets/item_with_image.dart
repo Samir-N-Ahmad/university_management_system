@@ -9,7 +9,6 @@ typedef OnClick = void Function();
 class ItetmWithImage extends StatelessWidget {
   final String _title;
   final String _body;
-  final OnClick _onClick;
   final String _image;
 
   ItetmWithImage(
@@ -19,8 +18,8 @@ class ItetmWithImage extends StatelessWidget {
       String image})
       : _title = title,
         _body = body,
-        _image = image,
-        _onClick = onClick;
+        _image = image;
+
   @override
   Widget build(BuildContext context) => Container(
         margin: EdgeInsets.all(10),
